@@ -15,8 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit, OnDestroy {
   // KeenThemes mock, change it to:
   defaultAuth: any = {
-    email: 'admin@demo.com',
-    password: 'demo',
+    email: 'user@gmail.com',
+    password: '12345',
   };
   loginForm: FormGroup;
   hasError: boolean;
@@ -82,12 +82,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.hasError = false;
     const loginSubscr = this.authService
       .login(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe((user: UserModel | undefined) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          this.hasError = true;
+      //.pipe(first())
+      .subscribe({
+        next: (user: any) => {
+          console.log(user)
+          if (user) {
+            //this.router.navigate([this.returnUrl]);
+            document.location.reload()
+          } else {
+            this.hasError = true;
+          }
         }
       });
     this.unsubscribe.push(loginSubscr);
