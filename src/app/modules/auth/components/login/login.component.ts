@@ -85,7 +85,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       //.pipe(first())
       .subscribe({
         next: (user: any) => {
+          console.log("--init login response")
           console.log(user)
+          console.log("--end login response")
           if (user) {
             //this.router.navigate([this.returnUrl]);
             document.location.reload()

@@ -54,6 +54,7 @@ export class AuthService implements OnDestroy {
     const URL = URL_SERVICIOS + "/users/login-admin"
     return this.http.post(URL, {email, password}).pipe(
       map((auth: any) => {
+        console.log("--auth back")
         console.log(auth)
         const result = this.setAuthFromLocalStorage(auth);
         console.log(result)
@@ -77,15 +78,21 @@ export class AuthService implements OnDestroy {
   }
 
   getUserByToken(): Observable<any> {
+    console.log(3)
     const auth = this.getAuthFromLocalStorage();
+    console.log(6)
     console.log(auth)
     if (!auth) {
+      console.log(7)
       return of(undefined);
     }
 
     this.isLoadingSubject.next(true);
-    return of(auth.authToken).pipe(
+    return of(auth).pipe(
       map((user: any) => {
+        console.log(8)
+        console.log(user)
+        console.log(9)
         if (user) {
           this.currentUserSubject.next(user);
         } else {
@@ -123,7 +130,9 @@ export class AuthService implements OnDestroy {
   // private methods
   private setAuthFromLocalStorage(auth: any): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
+    console.log(1)
     if (auth && auth.user.token) {
+      console.log(2)
       localStorage.setItem("token", auth.user.token)
       localStorage.setItem("user", JSON.stringify(auth.user.user))
       return true;
@@ -133,9 +142,11 @@ export class AuthService implements OnDestroy {
 
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
+      console.log(4)
       //const lsValue = localStorage.getItem(this.authLocalStorageToken);
       const lsValue = localStorage.getItem("user");
       if (!lsValue) {
+        console.log(5)
         return undefined;
       }
 

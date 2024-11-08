@@ -8,13 +8,27 @@ export class AuthGuard  {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.authService.currentUserValue;
-    if (currentUser) {
+    if (!currentUser) {
       // logged in so return true
-      return true;
+      this.authService.logout();
+      return false;
     }
 
+    let token = this.authService.token
+    if(!token){
+      this.authService.logout()
+      return false;
+    }
+
+    let expiration = (JSON.parse(atob(token.split(".")[1]))).exp;
+    if(Math.floor((new Date().getTime())/1000) >= expiration){
+      this.authService.logout()
+      return false;
+    }
+
+    return true;
     // not logged in so redirect to login page with the return url
-    this.authService.logout();
-    return false;
+    // this.authService.logout();
+    // return false;
   }
 }
