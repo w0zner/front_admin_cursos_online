@@ -21,17 +21,18 @@ interface Usuario {
 
 export class UsersListComponent implements OnInit {
 
-  users: Usuario[] = []
-
+  users: any[] = []
+  isLoading: any
   constructor(public modalService: NgbModal, private userService: UsersService) {
 
   }
 
   ngOnInit(): void {
+    this.isLoading = this.userService.isLoading$;
     this.userService.listUsers().subscribe({
       next: (response: any) => {
 
-        this.users = response as Usuario[]
+        this.users = response.users as Usuario[]
         console.log(this.users)
       },
       error: (err) => {
